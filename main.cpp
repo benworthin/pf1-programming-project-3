@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 
 int getUserInput() {
@@ -29,6 +30,12 @@ int validateUserInput(int userInput, int lowestValue, int highestValue) {
 
 }
 
+int generateRandomNumber(int max) {
+
+    return random() % max;
+
+}
+
 int main() {
 
     // TODO: Number of man hours spent digging in a week
@@ -36,12 +43,18 @@ int main() {
     //  Decide if its a cold or hot week for # of hours worked
     //  20 if hot, 30 if cold (coin flip)
     //  Use this to calculate how many hours spent digging a week
+
+    const int MIN_DIGGERS = 1;
+    const int MAX_DIGGERS = 5;
+    const int MIN_WAGE = 9;
+    const int MAX_WAGE = 35;
+    const int COLD_WEEK_HOURS = 30;
+    const int HOT_WEEK_HOURS = 20;
+
     cout << "--- Atari Vintage Game Profit Calculator ---" << endl;
     cout << "Amount of diggers to hire (1-5): " << endl;
     int diggersHired = getUserInput();
     diggersHired = validateUserInput(diggersHired, 1, 5);
-    cout << diggersHired;
-
 
     // TODO: Number of game cartridges found in a week
     //  How many game cartridges are found for each man hour of digging
