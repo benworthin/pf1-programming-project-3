@@ -1,7 +1,9 @@
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 using namespace std;
 
+// Function to get user input
 int getUserInput() {
 
     int input;
@@ -13,6 +15,7 @@ int getUserInput() {
 
 }
 
+// Function to validate user input
 int validateUserInput(int userInput, int lowestValue, int highestValue) {
 
     bool loopAgain = true;
@@ -30,49 +33,87 @@ int validateUserInput(int userInput, int lowestValue, int highestValue) {
 
 }
 
+// Function to generate random number based on max value parameter
 int generateRandomNumber(int max) {
 
-    return random() % max;
+    return rand() % max + 1;
 
 }
 
 int main() {
 
-    // TODO: Number of man hours spent digging in a week
-    //  How many people do you want hired to dig? (1-5)
-    //  Decide if its a cold or hot week for # of hours worked
-    //  20 if hot, 30 if cold (coin flip)
-    //  Use this to calculate how many hours spent digging a week
-
+    // Declaration of all constants and variables needed outside for loop scope
     const int MIN_DIGGERS = 1;
     const int MAX_DIGGERS = 5;
     const int MIN_WAGE = 9;
     const int MAX_WAGE = 35;
     const int COLD_WEEK_HOURS = 30;
     const int HOT_WEEK_HOURS = 20;
+    int totalProfit = 0;
 
+    // Get number of diggers hired
     cout << "--- Atari Vintage Game Profit Calculator ---" << endl;
     cout << "Amount of diggers to hire (1-5): " << endl;
     int diggersHired = getUserInput();
-    diggersHired = validateUserInput(diggersHired, 1, 5);
+    diggersHired = validateUserInput(diggersHired, MIN_DIGGERS, MAX_DIGGERS);
 
-    // TODO: Number of game cartridges found in a week
-    //  How many game cartridges are found for each man hour of digging
-    //  Roll a dice (1-6) to decide
-    //  Use this to calculate how many found in a week
+    // Get wage paid to diggers
+    cout << "Diggers Wage (9-35): " << endl;
+    int diggersWage = getUserInput();
+    diggersWage = validateUserInput(diggersWage, MIN_WAGE, MAX_WAGE);
 
-    // TODO: Sales price of the game cartridges found in a week
-    //  If you sell 1-99 games, $10/game
-    //  100-199 games, ($20 - count/10)
-    //  >=200 games, $1/game
-    //  Use this to calculate money made that week based on games found
+    // Output table labels
+    cout << setw(5) << "Week" << setw(15) << "Hours" << setw(15) << "Games" << setw(15)
+         << "Price" << setw(15) << "Profit" << setw(15) << "Total" << endl;
 
-    // TODO: Profit/loss for that week
-    //  User at start should enter wage for diggers ($9/hr - $35/hr)
-    //  Calculate the profit/loss with number of man hours, number of games, and sale price
+    // 52 week simulation
+    for (int week = 1; week <= 52; week++) {
 
-    // TODO: Profit/loss for the year
-    //  Using the numbers above calculate the profit/loss for the year
+        // Declare all variables so the values aren't reset every iteration
+        int weekManHours;
+        int gamesFoundInAManHour;
+        int gamesFoundInAWeek;
+        int gameSalePrice;
+        int weekProfit;
+        int weekWagesPaid;
+        int coldOrHotWeek;
+
+        // Get random value and decide on hot or cold week
+        coldOrHotWeek = generateRandomNumber(2);
+        if (coldOrHotWeek == 1) {
+            coldOrHotWeek = HOT_WEEK_HOURS;
+        } else {
+            coldOrHotWeek = COLD_WEEK_HOURS;
+        }
+
+        // Calculate man hours that week
+        weekManHours = diggersHired * coldOrHotWeek;
+
+        // Get random number of games found and calculate games found in a week
+        gamesFoundInAManHour = generateRandomNumber(6);
+        gamesFoundInAWeek = gamesFoundInAManHour * weekManHours;
+
+        // Decide sales price for games
+        if (gamesFoundInAWeek <= 99) {
+            gameSalePrice = 10;
+        } else if (gamesFoundInAWeek <= 199) {
+            gameSalePrice = (20 - (gamesFoundInAWeek / 10));
+        } else {
+            gameSalePrice = 1;
+        }
+
+        // Calculate wages paid a week, week profit and total profit
+        weekWagesPaid = diggersWage * weekManHours;
+        weekProfit = (gamesFoundInAWeek * gameSalePrice) - weekWagesPaid;
+        totalProfit += weekProfit;
+
+        // Output numbers to user
+        cout << setw(5) << week << setw(15) << weekManHours << setw(15) << gamesFoundInAWeek << setw(15)
+             << gameSalePrice << setw(15) << weekProfit << setw(15) << totalProfit << endl;
+
+    }
+
+    cout << "Congratulations! You made $" << totalProfit << " total profit!" << endl;
 
     return 0;
 
